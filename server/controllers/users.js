@@ -42,10 +42,14 @@ export const addRemoveFriend = async(req, res) => {
     const user = await User.findById(id);
     const friend = await User.findById(friendId);
 
+    // friends 배열에 add 나 remove할 때 본인과 상대방 계정에 모두 적용.
     if(user.friends.includes(friendId)){
+      // 이미 친구 추가 된 계정이면 유저의 friends 배열에서 친구id 제거
+      // 친구의 friends 배열에서도 유저 id 제거
       user.friends = user.friends.filter((id) => id !== friendId);
       friend.friends = user.friends.filter((id) => id !== id);
     }else{
+      // 친구 추가한 적 없는 계정이면 유저와 친구의 friends 배열의 각자의 id push
       user.friends.push(friendId);
       friend.friends.push(id);
     }

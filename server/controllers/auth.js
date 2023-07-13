@@ -2,32 +2,37 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken'
 import User from "../models/User.js";
 
-// register user 회원가입
+// register 회원가입
 export const register = async(req, res) => {
   try{
-    const {name, email, password, picturePath, friends, location, occupation} = req.body;
+    const {name, email, password} = req.body;
+
+    // 이미 가입된 이메일인지 확인
+    const userExistCheck = await User.findOne({email});
+    if(userExistCheck) res.status(400).json({message: '이미 해당 이메일로 가입된 계정이 존재합니다.'})
     
-    // encrypt password 비밀번호 암호화
-    const salt = await bcrypt.genSalt()
-    // hash password 비밀번호 해시화
+    // encrypt password 비밀번호 암호화/해시화
+    const salt = await bcrypt.genSalt(10)
     const passwordHash = await bcrypt.hash(password, salt);
 
-    const newUser = new User({
-      name, 
-      email, 
-      password : passwordHash, 
-      picturePath, 
-      friends, 
-      location, 
-      occupation,
-      // viewedProfile, impressions에 1~10000 사이의 임의의 숫자를 할당
-      viewedProfile: Math.floor(Math.random() * 10000),
-      impressions: Math.floor(Math.random() * 10000)
+    // 유저 정보 생성 : 비밀번호는 암호화 된걸로 저장 해야 함
+
+    const user = await User.create({
+      name,
+      email,
+      password: passwordHash
     })
-    const savedUser = await newUser.save();
-    res.status(200).json(savedUser);
+    
+    if(user){
+      // status 201은 새로운 데이터가 생성 되었음 의미
+      res.status(201).json({
+        _id: user.id,
+        name: user.name,
+        email: user.email
+      })
+    }
   }catch(err){
-    res.status(400).json({error: 'faile to register 회원가입에 실패했습니다.'});
+    res.status(400).json({message: '회원가입에 실패했습니다. fail to register '});
   }
 }
 

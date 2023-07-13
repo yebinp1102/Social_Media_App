@@ -25,10 +25,16 @@ const login = async(userData) => {
   }
 }
 
+// 로그아웃
+const logout = async() => {
+  localStorage.removeItem('user');
+}
+
 
 const authAPIs = {
   register,
-  login
+  login,
+  logout
 }
 
 export default authAPIs

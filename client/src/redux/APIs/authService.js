@@ -8,13 +8,27 @@ const register = async(userData) => {
     const res = await axios.post(`${API}/register`, userData);
     return res.data
   }catch(err){
-    console.log('register api를 처리하는 과정에서 FE 에러 발생')
+    console.log('register api를 FE에서 처리하는 도중 에러 발생')
+  }
+}
+
+// 로그인 login
+const login = async(userData) => {
+  try{
+    const res = await axios.post(`${API}/login`, userData)
+    if(res.data){
+      localStorage.setItem('user', JSON.stringify(res.data));
+    }
+    return res.data
+  }catch(err){
+    console.log(`login api를 FE에서 처리하는 도중 에러 발생`)
   }
 }
 
 
 const authAPIs = {
-  register
+  register,
+  login
 }
 
 export default authAPIs

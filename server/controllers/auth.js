@@ -36,20 +36,32 @@ export const register = async(req, res) => {
   }
 }
 
+// 토큰은 유저 id를 베이스로 생성하며 12시간 후 자동 소멸 됨
+const generateToken = (id) => {
+    return jwt.sign({id}, process.env.JWT_SECRET, {
+      expiresIn: '12h'
+    })
+}
+
 // login
 export const login = async(req, res) => {
   try{
     const {email, password} = req.body;
+
+    // 이메일에 해당하는 유저 정보가 있는지 확인
     const user = await User.findOne({ email: email});
-    if(!user) return res.status(400).json({msg: "User does not exist 존재하지 않는 유저의 이메일입니다."})
+    if(!user) return res.status(400).json({message: "User does not exist 존재하지 않는 유저의 이메일입니다."})
 
+    // 비밀번호 일치 여부 확인
     const isMatch = await bcrypt.compare(password, user.password);
-    if(!isMatch) return res.status(400).json({msg: "Invalid credential 올바르지않은 접근입니다."})
+    if(!isMatch) return res.status(400).json({message: "Invalid credential 올바르지않은 접근입니다."})
 
-    const token = jwt.sign({ id: user._id}, process.env.JWT_SECRET)
-    delete user.password; // FE에 password를 보내지 않기 위해 delete
-
-    res.status(200).json({token, user});
+    res.status(200).json({
+      _id: user.id,
+      name: user.name,
+      email: user.email,
+      token : generateToken(user._id)
+     });
 
 
   }catch(err){

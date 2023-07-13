@@ -19,10 +19,13 @@ const Register = () => {
     if(isError){
       console.log('error')
     }
-    if(isSuccess || user){ 
+    if(user){ 
       // 이미 로그인 한 상태면 회원가입에 접근하기 못하게 함
-      alert('회원가입 되었습니다.')
       navigate('/')
+    }
+    if(isSuccess){
+      alert('회원가입 되었습니다.')
+      navigate('/login');
     }
     dispatch(reset());
   },[user, isError, isSuccess, message, navigate, dispatch])

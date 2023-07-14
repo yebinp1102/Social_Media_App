@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { 
   Box,
   IconButton,
@@ -24,6 +24,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { setMode, setLogout } from "state"
 import { useNavigate } from "react-router-dom"
 import FlexBetween from "./FlexBetween"
+import {FaSignInAlt, FaUser} from 'react-icons/fa'
 
 const Navbar = () => {
   // size for mobile screen
@@ -44,8 +45,7 @@ const Navbar = () => {
   const alt = theme.palette.background.alt;
 
   const fullName = `${user.name}`;
-
-
+  
   return (
     <FlexBetween padding="1rem 6%" backgroundColor={alt}>
       <FlexBetween gap="1.75rem">
@@ -73,6 +73,7 @@ const Navbar = () => {
           </FlexBetween>
         )}
       </FlexBetween>
+
       {/* Desktop version navbar */}
       {isNonMobileScreens ? (
         <FlexBetween gap="2rem">
@@ -84,37 +85,10 @@ const Navbar = () => {
               <LightMode sx={{fontSize: "25px", color: dark}} />
             )}
           </IconButton>
-          <Message sx={{fontSize: "25px"}} />
-          <Notifications sx={{fontSize: "25px"}} />
-          <Help sx={{fontSize: "25px"}} />
-          <FormControl variant="standard" value={fullName}>
-            <Select
-              value={fullName}
-              sx={{
-                backgroundColor: neutralLight,
-                width: "150px",
-                borderRadius: "0.25rem",
-                p: "0.25rem 1rem",
-                "& .MuiSvgIcon-root" : {
-                  pr: "0.25rem",
-                  width: "3rem",
-                },
-                "& .MuiSelect-select":{
-                  backgroundColor: neutralLight
-                }
-              }}
-              input={<InputBase />}
-              >
-                <MenuItem value={fullName}>
-                  <Typography>{fullName}</Typography>
-                </MenuItem>
-                <MenuItem onClick={() => dispatch(setLogout())}>Log out</MenuItem>
-              </Select>
-          </FormControl>
+          <FaSignInAlt />회원가입
+          <FaUser />로그인
         </FlexBetween>) : (
-        <IconButton
-          onClick={() => setIsMobileMenuToggled(!isMobileMenuToggled)}
-        >
+        <IconButton onClick={() => setIsMobileMenuToggled(!isMobileMenuToggled)}>
           <Menu />
         </IconButton>
       )}
@@ -150,33 +124,7 @@ const Navbar = () => {
                 <LightMode sx={{fontSize: "25px", color: dark}} />
               )}
             </IconButton>
-            <Message sx={{fontSize: "25px"}} />
-            <Notifications sx={{fontSize: "25px"}} />
-            <Help sx={{fontSize: "25px"}} />
-            <FormControl variant="standard" value={fullName}>
-              <Select
-                value={fullName}
-                sx={{
-                  backgroundColor: neutralLight,
-                  width: "150px",
-                  borderRadius: "0.25rem",
-                  p: "0.25rem 1rem",
-                  "& .MuiSvgIcon-root" : {
-                    pr: "0.25rem",
-                    width: "3rem",
-                  },
-                  "& .MuiSelect-select":{
-                    backgroundColor: neutralLight
-                  }
-                }}
-                input={<InputBase />}
-                >
-                  <MenuItem value={fullName}>
-                    <Typography>{fullName}</Typography>
-                  </MenuItem>
-                  <MenuItem onClick={() => dispatch(setLogout())}>Log out</MenuItem>
-                </Select>
-            </FormControl>
+
           </FlexBetween>
         </Box>
       )}

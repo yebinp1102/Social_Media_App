@@ -11,7 +11,6 @@ import { fileURLToPath } from 'url'
 import authRoutes from './routes/auth.js'
 import userRoutes from './routes/users.js'
 import postRoutes from './routes/posts.js'
-import {register} from './controllers/auth.js'
 import { verifyToken } from './middleware/auth.js'
 import {createPost} from './controllers/posts.js'
 
@@ -20,14 +19,17 @@ import {createPost} from './controllers/posts.js'
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-dotenv.config();
 const app = express();
+
+dotenv.config();
+
 app.use(express.json());
 app.use(helmet());
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }))
 app.use(morgan("common"));
 app.use(bodyParser.json({limit: "30mb", extended: true}));
 app.use(bodyParser.urlencoded({limit: "30mb", extended: true}));
+app.use(express.urlencoded({extended: false}));
 app.use(cors());
 
 // set directory of where we our assets, in this project images
@@ -36,7 +38,7 @@ app.use("/assets", express.static(path.join(__dirname, 'public/assets')));
 // file storage
 const storage = multer.diskStorage({
   destination: function (req, file, cb){
-    cb(null, "public/assets")
+    cb(__dirname, "public/assets")
   },
   filename: function(req, file, cb){
     cb(null, file.originalname)
@@ -46,20 +48,24 @@ const storage = multer.diskStorage({
 const upload = multer({ storage })
 
 // routes with files
-app.post("/auth/register", upload.single("picture"), register);
 app.post("/posts", verifyToken, upload.single("picture"), createPost);
 
 // routes 
-app.use("/auth", authRoutes);
+app.use("/api/auth", authRoutes);
 app.use("/users", userRoutes);
 app.use("/posts", postRoutes);
 
+const port = process.env.PORT || 8000;
+app.listen(port, () => console.log(`포트 ${port}에서 서버 운영 중`))
 
-// Mongoose setup
-const PORT = process.env.PORT || 5000;
-mongoose.connect(process.env.MONGO_URL, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-}).then(() => {
-  app.listen(PORT, () => console.log(`server is running on PORT ${PORT}`))
-}).catch((err) => console.log('fail to connect to the MongoDB'))
+const connectDB = async () => {
+  try{
+    const connext = await mongoose.connect(process.env.MONGO_URL,
+      { useNewUrlParser: true, useUnifiedTopology:true }
+      )
+      console.log(`데이터 베이스에 연결 되었습니다. 포트는 ${port}`)
+  }catch(err){
+    console.log(err)
+  }
+}
+connectDB();

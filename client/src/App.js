@@ -1,13 +1,14 @@
-import { BrowserRouter, Navigate, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import HomePage from 'pages/HomePage';
-import LoginPage from 'pages/LoginPage';
+import Lgoin from 'pages/Login';
 import ProfilePage from 'pages/ProfilePage';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { createTheme } from '@mui/material';
 import { themeSettings } from './theme';
-import Navbar from 'components/Navbar';
+import Register from 'pages/Register';
+import Header from 'components/Header';
 
 function App() {
   const mode = useSelector((state) => state.mode);
@@ -17,9 +18,11 @@ function App() {
     <BrowserRouter>
       <ThemeProvider theme={theme}>
         <CssBaseline />
+        <Header />
         <Routes>
           <Route path='/' element={<HomePage />} />
-          <Route path='/login' element={<LoginPage/>} />
+          <Route path='/login' element={<Lgoin/>} />
+          <Route path='/register' element={<Register/>} />
           <Route path='/profile/:userId' element={<ProfilePage />} />
         </Routes>
       </ThemeProvider>

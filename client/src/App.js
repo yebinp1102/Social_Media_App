@@ -2,30 +2,23 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import HomePage from 'pages/HomePage';
 import Lgoin from 'pages/Login';
 import ProfilePage from 'pages/ProfilePage';
-import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
-import { CssBaseline, ThemeProvider } from '@mui/material';
-import { createTheme } from '@mui/material';
-import { themeSettings } from './theme';
 import Register from 'pages/Register';
 import Header from 'components/Header';
+import DarkModeBtn from 'components/DarkModeBtn';
 
 function App() {
-  const mode = useSelector((state) => state.mode);
-  const theme = useMemo(() => createTheme(themeSettings(mode)), [mode])
+
 
   return (
     <BrowserRouter>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
         <Header />
+        <DarkModeBtn />
         <Routes>
           <Route path='/' element={<HomePage />} />
           <Route path='/login' element={<Lgoin/>} />
           <Route path='/register' element={<Register/>} />
           <Route path='/profile/:userId' element={<ProfilePage />} />
         </Routes>
-      </ThemeProvider>
     </BrowserRouter>
   );
 }

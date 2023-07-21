@@ -11,6 +11,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  transition: 0.2s ease-out;
 }
 
 body {
@@ -58,6 +59,11 @@ h3 {
   margin: 0 auto;
   padding: 0 20px;
   text-align: center;
+}
+
+.fixedWidth{
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .heading {

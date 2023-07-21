@@ -38,7 +38,6 @@ const Login = () => {
       navigate('/')
     }
     if(isSuccess){
-      alert(`로그인 되었습니다. 안녕하세요 ${user.name} 님!`);
       navigate('/');
     }
   },[user, isError, isSuccess, message, navigate, dispatch])

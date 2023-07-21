@@ -1,11 +1,11 @@
 import React from 'react'
-import { Box } from '@mui/material'
+import MyFeed from 'components/MyFeed'
 
 const HomePage = () => {
   return (
-    <Box>
-
-    </Box>
+    <>
+      Home page
+    </>
   )
 }
 

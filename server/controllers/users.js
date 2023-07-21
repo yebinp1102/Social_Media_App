@@ -69,3 +69,21 @@ export const addRemoveFriend = async(req, res) => {
     res.status(400).json({message: err.message});
   }
 }
+
+export const updateUser = async(req, res) => {
+  try{
+    const {name, introduction, image} = req.body;
+
+    // 해당 유저가 존재하는지 먼저 확인
+    const user = await User.findById(req.params.id);
+    if(!user){
+      res.status(400).json({message: '존재하지 않는 유저의 정보 입니다.'})
+    }
+
+    // 유저 정보가 존재하면 업데이트 진행
+    const updatedUser = await User.findByIdAndUpdate(req.params.id, {name, introduction, image}, {new: true});
+    res.status(200).json(updatedUser)
+  }catch(err){
+    res.status(400).json({message: 'BE에서 유저 정보를 업데이트 하는 과정에서 에러가 발생했습니다.'})
+  }
+}

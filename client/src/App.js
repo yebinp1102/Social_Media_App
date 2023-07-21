@@ -1,23 +1,24 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import HomePage from 'pages/HomePage';
+import Home from 'pages/Home';
 import Lgoin from 'pages/Login';
-import ProfilePage from 'pages/ProfilePage';
+import Profile from 'pages/Profile';
 import Register from 'pages/Register';
 import Header from 'components/Header';
 import DarkModeBtn from 'components/DarkModeBtn';
+import ProfileEdit from 'pages/ProfileEdit';
 
 function App() {
-
 
   return (
     <BrowserRouter>
         <Header />
         <DarkModeBtn />
         <Routes>
-          <Route path='/' element={<HomePage />} />
+          <Route path='/' element={<Home />} />
           <Route path='/login' element={<Lgoin/>} />
           <Route path='/register' element={<Register/>} />
-          <Route path='/profile/:userId' element={<ProfilePage />} />
+          <Route path='/users/:userId' element={<Profile />} />
+          <Route path='/users/edit/:userId' element={<ProfileEdit />} />
         </Routes>
     </BrowserRouter>
   );
